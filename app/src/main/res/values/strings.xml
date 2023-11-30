@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">My Application</string>
+
+    <!-- Home Activity strings -->
+    <string name="shopping_list_container_text">%1$s</string>
+    <plurals name="number_of_items">
+        <item quantity="one">%1$d item</item>
+        <item quantity="other">%1$d items</item>
+    </plurals>
+</resources>
