@@ -1,10 +1,43 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Shopping List App</string>
 
     <!-- Home Activity strings -->
+    <string name="home_create_button">+</string>
     <string name="shopping_list_container_text">%1$s</string>
     <plurals name="number_of_items">
         <item quantity="one">%1$d item</item>
         <item quantity="other">%1$d items</item>
     </plurals>
+    <string name="last_purchase_date">Last Bought: %1$s</string>
+    <string name="never_purchased">never</string>
+    <string name="months_ago">%1$s months ago</string>
+    <string name="weeks_ago">%1$s weeks ago</string>
+    <string name="days_ago">%1$s days ago</string>
+    <string name="model_deleted_text">%1$s deleted</string>
+    <string name="model_deleted_undo_text">UNDO</string>
+    <string name="model_deleted_error">Error occurred while deleting shopping list</string>
+
+    <!-- Edit Shopping List Activity strings -->
+    <string name="back_button">Back</string>
+    <string name="title_text">%1$s</string>
+    <string name="add_item_button">+</string>
+    <string name="buy_list_button">BUY</string>
+    <!-- Edit title pop up -->
+    <string name="edit_title_button">Edit Title</string>
+    <string name="edit_title_text">%s$s</string>
+    <string name="edit_title_popup_ok">OK</string>
+    <string name="edit_title_popup_cancel">Cancel</string>
+    <!-- Empty items text -->
+    <string name="recycler_view_empty_item_text">No items here</string>
+    <!-- Edit item pop up -->
+    <string name="edit_item_model_title">Edit Item</string>
+    <string name="edit_item_model_text">Item Name:</string>
+    <!-- Undo item delete SnackBar -->
+    <string name="item_deleted_text">%1$s deleted</string>
+    <string name="item_deleted_undo_text">UNDO</string>
+
+    <!-- Purchase Activity strings -->
+    <string name="purchase_list_title">%1$s</string>
+    <string name="purchase_done">DONE</string>
+    <string name="purchase_item_title">%1$s</string>
 </resources>

@@ -1,0 +1,211 @@
+package com.example.myapplication;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.example.myapplication.db.DBHelper;
+import com.example.myapplication.adapters.ItemListAdapter;
+import com.example.myapplication.model.ItemModel;
+import com.example.myapplication.model.ShoppingListModel;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.Optional;
+
+public class EditShoppingListActivity extends AppCompatActivity {
+
+    private ShoppingListModel shoppingListModel;
+
+    @NonNull // Field marked as NonNull because it will always be initialised in the onCreate method
+    private ItemListAdapter recyclerAdapter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_edit_shopping_list);
+
+        long id = getIntent().getLongExtra("shoppingListModelId", -1);
+        this.shoppingListModel = ShoppingListModel.getModelById(id);
+        if(shoppingListModel == null) throw new NullPointerException("ShoppingListModel cannot be null");
+
+        updateTitleText();
+
+        Button back = findViewById(R.id.back_button);
+        back.setOnClickListener(v -> {
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.putExtra("shoppingListModelId", shoppingListModel.getId());
+            startActivity(intent);
+        });
+
+        Button editText = findViewById(R.id.edit_title_button);
+        editText.setOnClickListener(v -> displayEditTitlePopup());
+
+        RecyclerView recycler = findViewById(R.id.recyclerView);
+        this.recyclerAdapter = new ItemListAdapter(shoppingListModel);
+        recyclerAdapter.setDeleteItemConsumer((itemModel, index) ->
+                handleItemDelete(recycler, itemModel, index));
+        recycler.setAdapter(recyclerAdapter);
+        recycler.setLayoutManager(new LinearLayoutManager(this));
+
+        Button addButton = findViewById(R.id.add_item_button);
+        addButton.setOnClickListener(v -> {
+            // If the item model most recently added to the list (the last item model)
+            // is empty, e.g. it does not have a name or any user set properties,
+            // then edit that item model instead of creating a duplicate empty model
+            Optional<ItemModel> optional = shoppingListModel.getLastItemModel();
+            ItemModel model;
+            if(optional.isPresent() && optional.get().isEmpty()) {
+                model = optional.get();
+            } else {
+                model = new ItemModel("");
+                model.setId(shoppingListModel.getAndIncrementItemsCounter());
+                shoppingListModel.getItemList().add(model);
+            }
+
+            // Open input dialog for the item model
+            displayEditItemPopup(model);
+        });
+
+        Button buyButton = findViewById(R.id.purchase_list_button);
+        buyButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, PurchaseListActivity.class);
+            intent.putExtra("shoppingListModelId", shoppingListModel.getId());
+            startActivity(intent);
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        // Save shopping list model to the database
+        DBHelper db = DBHelper.getInstance(this);
+        db.saveShoppingList(shoppingListModel);
+
+        super.onPause();
+    }
+
+    /**
+     * <p>
+     *     This method creates an {@link AlertDialog} from the
+     *     edit_title_popup.xml layout file. When the user inputs the text and clicks OK,
+     *     the model is updated.
+     * </p>
+     */
+    private void displayEditTitlePopup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.edit_title_button));
+
+        View inflated = LayoutInflater.from(this)
+                .inflate(R.layout.edit_title_popup, null);
+
+        final EditText input = inflated.findViewById(R.id.edit_title_input);
+        input.setText(shoppingListModel.getName());
+
+        builder.setView(inflated);
+
+        builder.setPositiveButton(R.string.edit_title_popup_ok, (dialog, which) -> {
+            dialog.dismiss();
+            shoppingListModel.setName(input.getText().toString());
+            updateTitleText();
+        });
+        builder.setNegativeButton(R.string.edit_title_popup_cancel, (dialog, which) -> {
+            dialog.cancel();
+        });
+        builder.show();
+    }
+
+    /**
+     * <p>
+     *     This method creates an {@link AlertDialog} from the
+     *     edit_item_model_popup.xml layout file. When the user inputs the text and clicks OK,
+     *     the {@link ItemModel} is updated and the recycler view is also updated
+     *     to display the changes.
+     * </p>
+     * @param model - the item model to edit
+     */
+    private void displayEditItemPopup(ItemModel model) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.edit_item_model_title));
+
+        View inflated = LayoutInflater.from(this)
+                .inflate(R.layout.edit_item_model_popup, null);
+
+        final EditText input = inflated.findViewById(R.id.edit_item_input);
+        input.setText(model.getName());
+
+        builder.setView(inflated);
+
+        builder.setPositiveButton(R.string.edit_title_popup_ok, (dialog, which) -> {
+            dialog.dismiss();
+            model.setName(input.getText().toString());
+            recyclerAdapter.notifyDataSetChanged();
+        });
+        builder.setNegativeButton(R.string.edit_title_popup_cancel, (dialog, which) -> {
+            dialog.cancel();
+        });
+        builder.show();
+    }
+
+    /**
+     * <p>
+     *     This method gets the {@link TextView} responsible for displaying
+     *     the shopping list name/title to the toolbar/action bar
+     *     and updates its text to reflect the {@link ShoppingListModel}'s name.
+     * </p>
+     */
+    private void updateTitleText() {
+        TextView titleText = findViewById(R.id.title_text_view);
+        String title = getString(R.string.title_text, shoppingListModel.getName());
+        titleText.setText(title);
+    }
+
+    /**
+     * <p>
+     *     Method to handle when the delete image is clicked in the recycler view list item.
+     *     This method will remove the item from the list, update the display and then display
+     *     a {@link Snackbar} giving the user an option to undo that delete action.
+     * </p>
+     * <p>
+     *     NotifyDataSetChanged is suppressed as calling the more 'efficient' method
+     *     {@link RecyclerView.Adapter#notifyItemInserted(int)} throws an index out of bounds
+     *     exception.
+     * </p>
+     * @param recycler - the recycler view holding the item models
+     * @param model - the deleted item model
+     * @param index - the index of the deleted item
+     */
+    @SuppressLint("NotifyDataSetChanged")
+    private void handleItemDelete(RecyclerView recycler, final ItemModel model, final int index) {
+        // Must cast to primitive integer because otherwise the compiler assumes
+        // we meant list.remove(Object), which would not work
+        model.setDeletedFlag(true);
+        shoppingListModel.getItemList().remove(index);
+        shoppingListModel.getDeletedItemList().add(model);
+        recyclerAdapter.notifyItemRemoved(index);
+
+        // Display SnackBar with option to undo
+        Snackbar.make(
+                recycler,
+                getString(R.string.item_deleted_text, model.getName()),
+                Snackbar.LENGTH_LONG
+        ).setAction(
+                R.string.item_deleted_undo_text, v -> {
+                    // Add the item model back to the list at the same index
+                    model.setDeletedFlag(false);
+                    shoppingListModel.getItemList().add(index, model);
+                    shoppingListModel.getDeletedItemList().remove(model);
+                    recyclerAdapter.notifyDataSetChanged();
+                }
+        ).show();
+    }
+}
