@@ -3,6 +3,8 @@ package com.example.myapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +21,7 @@ import com.example.myapplication.db.DBHelper;
 import com.example.myapplication.adapters.ItemListAdapter;
 import com.example.myapplication.model.ItemModel;
 import com.example.myapplication.model.ShoppingListModel;
+import com.example.myapplication.util.SwipeLeftDeleteHelper;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Optional;
@@ -27,6 +30,7 @@ public class EditShoppingListActivity extends AppCompatActivity {
 
     private ShoppingListModel shoppingListModel;
 
+    private RecyclerView recyclerView;
     @NonNull // Field marked as NonNull because it will always be initialised in the onCreate method
     private ItemListAdapter recyclerAdapter;
 
@@ -51,12 +55,16 @@ public class EditShoppingListActivity extends AppCompatActivity {
         Button editText = findViewById(R.id.edit_title_button);
         editText.setOnClickListener(v -> displayEditTitlePopup());
 
-        RecyclerView recycler = findViewById(R.id.recyclerView);
+        this.recyclerView = findViewById(R.id.recyclerView);
         this.recyclerAdapter = new ItemListAdapter(shoppingListModel);
-        recyclerAdapter.setDeleteItemConsumer((itemModel, index) ->
-                handleItemDelete(recycler, itemModel, index));
-        recycler.setAdapter(recyclerAdapter);
-        recycler.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(recyclerAdapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, linearLayoutManager.getOrientation()));
+
+        ItemTouchHelper deleteHelper = new ItemTouchHelper(new SwipeLeftDeleteHelper(this,
+                this::swipeLeftToDeleteItem));
+        deleteHelper.attachToRecyclerView(recyclerView);
 
         Button addButton = findViewById(R.id.add_item_button);
         addButton.setOnClickListener(v -> {
@@ -180,30 +188,27 @@ public class EditShoppingListActivity extends AppCompatActivity {
      *     {@link RecyclerView.Adapter#notifyItemInserted(int)} throws an index out of bounds
      *     exception.
      * </p>
-     * @param recycler - the recycler view holding the item models
-     * @param model - the deleted item model
-     * @param index - the index of the deleted item
+     * @param position - the index of the deleted item
      */
     @SuppressLint("NotifyDataSetChanged")
-    private void handleItemDelete(RecyclerView recycler, final ItemModel model, final int index) {
-        // Must cast to primitive integer because otherwise the compiler assumes
-        // we meant list.remove(Object), which would not work
-        model.setDeletedFlag(true);
-        shoppingListModel.getItemList().remove(index);
-        shoppingListModel.getDeletedItemList().add(model);
-        recyclerAdapter.notifyItemRemoved(index);
+    private void swipeLeftToDeleteItem(int position) {
+        final ItemModel item = shoppingListModel.getItemList().remove(position);
+        item.setDeletedFlag(true);
+        shoppingListModel.getDeletedItemList().add(item);
+
+        recyclerAdapter.notifyItemRemoved(position);
 
         // Display SnackBar with option to undo
         Snackbar.make(
-                recycler,
-                getString(R.string.item_deleted_text, model.getName()),
+                recyclerView,
+                getString(R.string.item_deleted_text, item.getName()),
                 Snackbar.LENGTH_LONG
         ).setAction(
                 R.string.item_deleted_undo_text, v -> {
                     // Add the item model back to the list at the same index
-                    model.setDeletedFlag(false);
-                    shoppingListModel.getItemList().add(index, model);
-                    shoppingListModel.getDeletedItemList().remove(model);
+                    item.setDeletedFlag(false);
+                    shoppingListModel.getItemList().add(position, item);
+                    shoppingListModel.getDeletedItemList().remove(item);
                     recyclerAdapter.notifyDataSetChanged();
                 }
         ).show();

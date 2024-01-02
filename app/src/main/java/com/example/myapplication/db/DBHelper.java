@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -15,6 +16,7 @@ import com.example.myapplication.model.ShoppingListModel;
 
 public class DBHelper extends SQLiteOpenHelper {
 
+    private static final String LOG_TAG = "DBHelper";
     private static DBHelper singletonInstance;
 
     public static DBHelper getInstance(Context context) {
@@ -34,7 +36,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DBContract.CategoryTable.SQL_CREATE_TABLE);
         db.execSQL(DBContract.ItemTable.SQL_CREATE_TABLE);
-        db.execSQL(DBContract.ListToItemTable.SQL_CREATE_TABLE);
         db.execSQL(DBContract.ListTable.SQL_CREATE_TABLE);
     }
 
@@ -42,7 +43,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(DBContract.CategoryTable.SQL_DROP_TABLE);
         db.execSQL(DBContract.ItemTable.SQL_DROP_TABLE);
-        db.execSQL(DBContract.ListToItemTable.SQL_DROP_TABLE);
         db.execSQL(DBContract.ListTable.SQL_DROP_TABLE);
 
         onCreate(db);
@@ -59,6 +59,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param list the shopping list model to save
      */
     public void saveShoppingList(ShoppingListModel list) {
+        Log.v(LOG_TAG, "Saving ShoppingListModel with ID: " + list.getId() + ", name: " + list.getName());
         final SQLiteDatabase db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -108,6 +109,8 @@ public class DBHelper extends SQLiteOpenHelper {
             if(result.moveToFirst()) {
                 int maxId = result.getInt(0);
                 ShoppingListModel.setListCounter(maxId + 1);
+
+                Log.v(LOG_TAG, "Loading shopping list counter, currently at: " + (maxId + 1));
             }
         }
 
@@ -123,6 +126,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     long lastPurchaseTimestamp = result.getLong(result.getColumnIndex(DBContract.ListTable.COLUMN_LAST_PURCHASE_DATE));
                     long itemCounter = result.getLong(result.getColumnIndex(DBContract.ListTable.COLUMN_ITEM_COUNTER));
 
+                    Log.v(LOG_TAG, "Loading ShoppingListModel with ID: " + id);
                     ShoppingListModel model = new ShoppingListModel(name);
                     model.setId(id);
                     model.setLastPurchasedDate(lastPurchaseTimestamp);
@@ -150,20 +154,15 @@ public class DBHelper extends SQLiteOpenHelper {
         final long catId = saveCategory(db, item.getCategory());
 
         ContentValues values = new ContentValues();
+        values.put(DBContract.ItemTable.COLUMN_LIST_ID, listId);
         values.put(DBContract.ItemTable._ID, item.getId());
         values.put(DBContract.ItemTable.COLUMN_NAME, item.getName());
         values.put(DBContract.ItemTable.COLUMN_CATEGORY_ID, catId);
+        values.put(DBContract.ItemTable.COLUMN_PURCHASE_POWER, item.getPurchasePriority());
         values.put(DBContract.ItemTable.COLUMN_DELETED_FLAG, item.isDeletedFlag() ? 1 : 0);
 
-        final long itemId = db.insertWithOnConflict(DBContract.ItemTable.TABLE_NAME, null,
-                values, SQLiteDatabase.CONFLICT_REPLACE);
-
-        // Save the list to item table
-        values = new ContentValues();
-        values.put(DBContract.ListToItemTable.COLUMN_LIST_ID, listId);
-        values.put(DBContract.ListToItemTable.COLUMN_ITEM_ID, itemId);
-
-        db.insert(DBContract.ListToItemTable.TABLE_NAME, null, values);
+        db.insertWithOnConflict(DBContract.ItemTable.TABLE_NAME, null, values,
+                SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     /**
@@ -176,12 +175,12 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     @SuppressLint("Range")
     private void loadItems(final SQLiteDatabase db, final ShoppingListModel model) {
+        Log.v(LOG_TAG, "Loading ItemModel's from list with ID: " + model.getId());
+
         // Only loads items that have not been deleted
         String sql = "SELECT * FROM " + DBContract.ItemTable.TABLE_NAME + " WHERE " +
                 DBContract.ItemTable.COLUMN_DELETED_FLAG + " = 0 AND " +
-                DBContract.ItemTable._ID + " IN (SELECT " + DBContract.ListToItemTable.COLUMN_ITEM_ID +
-                " FROM " + DBContract.ListToItemTable.TABLE_NAME + " WHERE " +
-                DBContract.ListToItemTable.COLUMN_LIST_ID + " = ?);";
+                DBContract.ItemTable.COLUMN_LIST_ID + " = ?";
 
         try (Cursor result = db.rawQuery(sql, new String[] { String.valueOf(model.getId()) })) {
             if(result.getCount() != 0) {
@@ -189,10 +188,11 @@ public class DBHelper extends SQLiteOpenHelper {
                     long id = result.getLong(result.getColumnIndex(DBContract.ItemTable._ID));
                     String name = result.getString(result.getColumnIndex(DBContract.ItemTable.COLUMN_NAME));
                     long catId = result.getLong(result.getColumnIndex(DBContract.ItemTable.COLUMN_CATEGORY_ID));
-                    // TODO: Load the category
+                    long purchasePower = result.getLong(result.getColumnIndex(DBContract.ItemTable.COLUMN_PURCHASE_POWER));
 
                     ItemModel itemModel = new ItemModel(name);
                     itemModel.setId(id);
+                    itemModel.setPurchasePriority(purchasePower);
 
                     model.getItemList().add(itemModel);
                 }

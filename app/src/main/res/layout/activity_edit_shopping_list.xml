@@ -6,41 +6,85 @@
     android:layout_height="match_parent"
     tools:context=".EditShoppingListActivity">
 
-    <include
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        layout="@layout/edit_list_action_bar" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?actionBarSize"
+        android:theme="?actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <Button
+            style="@style/Button"
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/back_button"
+            android:layout_gravity="start"
+            android:layout_marginStart="20dp"
+            />
+
+        <TextView
+            style="@style/ToolbarTitle"
+            android:id="@+id/title_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/title_text"
+            android:layout_gravity="center"
+            />
+
+        <Button
+            style="@style/Button"
+            android:id="@+id/edit_title_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_title_button"
+            android:layout_gravity="end"
+            android:layout_marginEnd="20dp"
+            />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <!--<include
+        android:id="@+id/toolbar"
+        layout="@layout/edit_list_action_bar" />-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="409dp"
-        android:layout_height="671dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <Button
+        style="@style/BigButton"
         android:id="@+id/add_item_button"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/rounded_button"
-        android:text="@string/add_item_button"
-        android:textSize="50sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/purchase_list_button"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/rounded_button"
+        android:text="@string/add_item_button"
+        android:textSize="50sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        style="@style/BigButton"
+        android:id="@+id/purchase_list_button"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/buy_list_button"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

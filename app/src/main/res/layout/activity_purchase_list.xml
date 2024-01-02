@@ -11,19 +11,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?actionBarSize"
-        android:theme="?actionBarTheme">
+        android:theme="?actionBarTheme"
+        android:background="?attr/colorPrimary">
 
         <TextView
+            style="@style/ToolbarTitle"
             android:id="@+id/purchase_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/purchase_list_title"
-            android:textSize="35sp"
-            android:textStyle="bold"
             android:layout_gravity="center"
             />
 
         <Button
+            style="@style/Button"
             android:id="@+id/purchase_done_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

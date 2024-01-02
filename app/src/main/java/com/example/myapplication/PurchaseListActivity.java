@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +18,7 @@ import com.example.myapplication.model.ShoppingListModel;
 public class PurchaseListActivity extends AppCompatActivity {
 
     private ShoppingListModel model;
+    private PurchaseAdapter recyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +36,15 @@ public class PurchaseListActivity extends AppCompatActivity {
         backButton.setOnClickListener(v -> finishPurchasing());
 
         RecyclerView recyclerView = findViewById(R.id.purchase_list);
-        recyclerView.setAdapter(new PurchaseAdapter(model));
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(recyclerAdapter = new PurchaseAdapter(model));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, linearLayoutManager.getOrientation()));
     }
 
     private void finishPurchasing() {
         model.setLastPurchasedDate(System.currentTimeMillis());
+        recyclerAdapter.updateItemRankings();
         DBHelper.getInstance(this).saveShoppingList(model);
 
         Intent intent = new Intent(this, HomeActivity.class);

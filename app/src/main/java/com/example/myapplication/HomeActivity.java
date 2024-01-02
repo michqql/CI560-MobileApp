@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,7 +36,9 @@ public class HomeActivity extends AppCompatActivity {
                 this::openShoppingListEditActivity
         );
         recyclerView.setAdapter(recyclerAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, linearLayoutManager.getOrientation()));
         ItemTouchHelper touchHelper = new ItemTouchHelper(new SwipeLeftDeleteHelper(
                 this, this::onSwipeLeftDeleteList));
         touchHelper.attachToRecyclerView(recyclerView);

@@ -15,7 +15,6 @@ import com.example.myapplication.model.ShoppingListModel;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ListViewHolder> {
 
@@ -37,7 +36,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     @Override
     public ListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recycler_view_list_row, parent, false);
+                .inflate(R.layout.recycler_view_shopping_list_row, parent, false);
 
         return new ListViewHolder(view);
     }

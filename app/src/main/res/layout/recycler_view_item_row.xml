@@ -8,17 +8,10 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_margin="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:cardBackgroundColor="@color/blueBlack"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="8dp"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,7 +25,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:text="TITLE"
-                android:textColor="@color/white"
                 android:textAllCaps="true"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -50,18 +42,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/rounded_button" />
-
-            <ImageView
-                android:id="@+id/delete_image"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="30dp"
-                android:background="@drawable/rounded_button"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/category_image"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@android:drawable/ic_menu_delete"
-                app:tint="@color/red" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

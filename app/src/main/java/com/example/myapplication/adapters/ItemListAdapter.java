@@ -22,14 +22,9 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     private static final int VIEW_TYPE_OBJECT = 1;
 
     private final ShoppingListModel model;
-    private BiConsumer<ItemModel, Integer> deleteItemConsumer;
 
     public ItemListAdapter(ShoppingListModel model) {
         this.model = model;
-    }
-
-    public void setDeleteItemConsumer(BiConsumer<ItemModel, Integer> deleteItemConsumer) {
-        this.deleteItemConsumer = deleteItemConsumer;
     }
 
     @Override
@@ -66,17 +61,16 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
         return model.getNumItems();
     }
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder {
+    public static class ItemViewHolder extends RecyclerView.ViewHolder {
 
         final TextView name;
-        final ImageView category, delete;
+        final ImageView category;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
 
             name = itemView.findViewById(R.id.item_name);
             category = itemView.findViewById(R.id.category_image);
-            delete = itemView.findViewById(R.id.delete_image);
         }
 
         public void bind(ItemModel itemModel, int index) {
@@ -87,12 +81,6 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
                 category.setImageDrawable(AppCompatResources
                         .getDrawable(itemView.getContext(), itemModel.getCategory().getDrawableId()));
             }
-            // Set a click listener to the delete image
-            delete.setOnClickListener(v -> {
-                if(ItemListAdapter.this.deleteItemConsumer != null) {
-                    ItemListAdapter.this.deleteItemConsumer.accept(itemModel, index);
-                }
-            });
         }
     }
 }

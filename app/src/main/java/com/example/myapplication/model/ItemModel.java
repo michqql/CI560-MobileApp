@@ -1,15 +1,11 @@
 package com.example.myapplication.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import androidx.annotation.NonNull;
-
 public class ItemModel {
 
     private long id;
     private String name;
     private CategoryModel category;
+    private long purchasePriority;
     private boolean deletedFlag;
 
     public ItemModel(String name) {
@@ -42,6 +38,14 @@ public class ItemModel {
 
     public boolean isEmpty() {
         return name == null || name.isEmpty();
+    }
+
+    public long getPurchasePriority() {
+        return purchasePriority;
+    }
+
+    public void setPurchasePriority(long purchasePriority) {
+        this.purchasePriority = purchasePriority;
     }
 
     public boolean isDeletedFlag() {
