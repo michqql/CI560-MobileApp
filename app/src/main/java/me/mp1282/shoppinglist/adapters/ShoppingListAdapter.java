@@ -1,4 +1,4 @@
-package com.example.myapplication.adapters;
+package me.mp1282.shoppinglist.adapters;
 
 import android.content.res.Resources;
 import android.view.LayoutInflater;
@@ -9,8 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.R;
-import com.example.myapplication.model.ShoppingListModel;
+import me.mp1282.shoppinglist.R;
+import me.mp1282.shoppinglist.model.ShoppingListModel;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -98,18 +98,6 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         @Override
         public void onClick(View v) {
             ShoppingListAdapter.this.shoppingListClickEvent.accept(model);
-        }
-
-        public TextView getTitleView() {
-            return titleView;
-        }
-
-        public TextView getNumItemsView() {
-            return numItemsView;
-        }
-
-        public TextView getDateView() {
-            return dateView;
         }
     }
 }

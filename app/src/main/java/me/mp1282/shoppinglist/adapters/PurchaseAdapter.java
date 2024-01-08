@@ -1,16 +1,7 @@
-package com.example.myapplication.adapters;
+package me.mp1282.shoppinglist.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.graphics.BlendMode;
-import android.graphics.BlendModeColorFilter;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
-import android.os.Build;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.R;
-import com.example.myapplication.model.ItemModel;
-import com.example.myapplication.model.ShoppingListModel;
-import com.google.android.material.color.MaterialColors;
+import me.mp1282.shoppinglist.R;
+import me.mp1282.shoppinglist.model.ItemModel;
+import me.mp1282.shoppinglist.model.ShoppingListModel;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -165,14 +155,6 @@ public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.ViewHo
         public ItemModelWrapper(ItemModel item, int position) {
             this.item = item;
             this.position = position;
-        }
-
-        public void setPurchaseTimestamp(long purchaseTimestamp) {
-            this.purchaseTimestamp = purchaseTimestamp;
-        }
-
-        public long getPurchaseTimestamp() {
-            return purchaseTimestamp;
         }
     }
 }

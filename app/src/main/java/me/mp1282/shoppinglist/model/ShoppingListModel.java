@@ -1,10 +1,4 @@
-package com.example.myapplication.model;
-
-import android.os.Build;
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import androidx.annotation.NonNull;
+package me.mp1282.shoppinglist.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +33,6 @@ public class ShoppingListModel {
         ShoppingListModel.listCounter = listCounter;
     }
 
-    public static int getListCounter() {
-        return listCounter;
-    }
-
     public static int getAndIncrementListCounter() {
         return listCounter++;
     }
@@ -54,8 +44,8 @@ public class ShoppingListModel {
     private boolean deletedFlag;
     private long itemsCounter = 0;
 
-    private ArrayList<ItemModel> itemList = new ArrayList<>();
-    private ArrayList<ItemModel> deletedItemList = new ArrayList<>();
+    private final ArrayList<ItemModel> itemList = new ArrayList<>();
+    private final ArrayList<ItemModel> deletedItemList = new ArrayList<>();
 
     public ShoppingListModel(String name) {
         this.name = name;

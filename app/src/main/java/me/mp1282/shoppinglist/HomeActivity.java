@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package me.mp1282.shoppinglist;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,10 +13,10 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.window.OnBackInvokedDispatcher;
 
-import com.example.myapplication.db.DBHelper;
-import com.example.myapplication.adapters.ShoppingListAdapter;
-import com.example.myapplication.model.ShoppingListModel;
-import com.example.myapplication.util.SwipeLeftDeleteHelper;
+import me.mp1282.shoppinglist.db.DBHelper;
+import me.mp1282.shoppinglist.adapters.ShoppingListAdapter;
+import me.mp1282.shoppinglist.model.ShoppingListModel;
+import me.mp1282.shoppinglist.util.SwipeLeftDeleteHelper;
 import com.google.android.material.snackbar.Snackbar;
 
 public class HomeActivity extends AppCompatActivity {
@@ -27,7 +27,6 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        System.out.println("HOME CREATE");
         setContentView(R.layout.activity_home);
 
         recyclerView = findViewById(R.id.recyclerView);

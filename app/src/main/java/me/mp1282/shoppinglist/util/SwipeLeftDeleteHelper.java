@@ -1,8 +1,7 @@
-package com.example.myapplication.util;
+package me.mp1282.shoppinglist.util;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 
@@ -11,7 +10,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.R;
+import me.mp1282.shoppinglist.R;
 
 import java.util.function.Consumer;
 

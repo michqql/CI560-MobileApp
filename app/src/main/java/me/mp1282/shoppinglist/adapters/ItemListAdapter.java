@@ -1,4 +1,4 @@
-package com.example.myapplication.adapters;
+package me.mp1282.shoppinglist.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.R;
-import com.example.myapplication.model.ItemModel;
-import com.example.myapplication.model.ShoppingListModel;
-
-import java.util.function.BiConsumer;
+import me.mp1282.shoppinglist.R;
+import me.mp1282.shoppinglist.model.ItemModel;
+import me.mp1282.shoppinglist.model.ShoppingListModel;
 
 public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemViewHolder> {
 
@@ -53,7 +51,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
         if(model.getItemList().isEmpty())
             return;
 
-        holder.bind(model.getItemList().get(position), position);
+        holder.bind(model.getItemList().get(position));
     }
 
     @Override
@@ -73,7 +71,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             category = itemView.findViewById(R.id.category_image);
         }
 
-        public void bind(ItemModel itemModel, int index) {
+        public void bind(ItemModel itemModel) {
             if(itemModel == null) return;
 
             name.setText(itemModel.getName());

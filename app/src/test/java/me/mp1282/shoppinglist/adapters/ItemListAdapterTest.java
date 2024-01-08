@@ -1,9 +1,9 @@
-package com.example.myapplication.adapters;
+package me.mp1282.shoppinglist.adapters;
 
 import static org.junit.Assert.*;
 
-import com.example.myapplication.model.ItemModel;
-import com.example.myapplication.model.ShoppingListModel;
+import me.mp1282.shoppinglist.model.ItemModel;
+import me.mp1282.shoppinglist.model.ShoppingListModel;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +11,6 @@ import org.junit.Test;
 public class ItemListAdapterTest {
 
     private static final int EXPECTED_ITEM_NUMBER = 10;
-    private static final int VIEW_TYPE_EMPTY = 0;
     private static final int VIEW_TYPE_OBJECT = 1;
 
     private ItemListAdapter adapter;
@@ -31,27 +30,15 @@ public class ItemListAdapterTest {
     }
 
     @Test
+    public void getItemCount() {
+        assertEquals(EXPECTED_ITEM_NUMBER, adapter.getItemCount());
+        assertNotEquals(EXPECTED_ITEM_NUMBER + 5, adapter.getItemCount());
+    }
+
+    @Test
     public void getItemViewType() {
         for(int i = 0; i < EXPECTED_ITEM_NUMBER; i++) {
             assertEquals(VIEW_TYPE_OBJECT, adapter.getItemViewType(i));
         }
-
-        assertEquals(VIEW_TYPE_EMPTY, adapter.getItemViewType(EXPECTED_ITEM_NUMBER + 1));
-        assertNotEquals(VIEW_TYPE_OBJECT, adapter.getItemViewType(EXPECTED_ITEM_NUMBER + 1));
-    }
-
-    @Test
-    public void onCreateViewHolder() {
-    }
-
-    @Test
-    public void onBindViewHolder() {
-
-    }
-
-    @Test
-    public void getItemCount() {
-        assertEquals(EXPECTED_ITEM_NUMBER, adapter.getItemCount());
-        assertNotEquals(EXPECTED_ITEM_NUMBER + 5, adapter.getItemCount());
     }
 }

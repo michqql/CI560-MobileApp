@@ -1,6 +1,5 @@
-package com.example.myapplication;
+package me.mp1282.shoppinglist;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -17,22 +16,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.myapplication.db.DBHelper;
-import com.example.myapplication.adapters.ItemListAdapter;
-import com.example.myapplication.model.ItemModel;
-import com.example.myapplication.model.ShoppingListModel;
-import com.example.myapplication.util.SwipeLeftDeleteHelper;
+import me.mp1282.shoppinglist.db.DBHelper;
+import me.mp1282.shoppinglist.adapters.ItemListAdapter;
+import me.mp1282.shoppinglist.model.ItemModel;
+import me.mp1282.shoppinglist.model.ShoppingListModel;
+import me.mp1282.shoppinglist.util.SwipeLeftDeleteHelper;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Optional;
 
 public class EditShoppingListActivity extends AppCompatActivity {
 
+    // Fields will always be initialised in the onCreate method
     private ShoppingListModel shoppingListModel;
-
-    private RecyclerView recyclerView;
-    @NonNull // Field marked as NonNull because it will always be initialised in the onCreate method
     private ItemListAdapter recyclerAdapter;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,9 +124,8 @@ public class EditShoppingListActivity extends AppCompatActivity {
             shoppingListModel.setName(input.getText().toString());
             updateTitleText();
         });
-        builder.setNegativeButton(R.string.edit_title_popup_cancel, (dialog, which) -> {
-            dialog.cancel();
-        });
+        builder.setNegativeButton(R.string.edit_title_popup_cancel, (dialog, which) ->
+                dialog.cancel());
         builder.show();
     }
 
@@ -141,6 +138,7 @@ public class EditShoppingListActivity extends AppCompatActivity {
      * </p>
      * @param model - the item model to edit
      */
+    @SuppressLint("NotifyDataSetChanged")
     private void displayEditItemPopup(ItemModel model) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.edit_item_model_title));
@@ -158,9 +156,8 @@ public class EditShoppingListActivity extends AppCompatActivity {
             model.setName(input.getText().toString());
             recyclerAdapter.notifyDataSetChanged();
         });
-        builder.setNegativeButton(R.string.edit_title_popup_cancel, (dialog, which) -> {
-            dialog.cancel();
-        });
+        builder.setNegativeButton(R.string.edit_title_popup_cancel, (dialog, which) ->
+                dialog.cancel());
         builder.show();
     }
 

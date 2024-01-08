@@ -1,4 +1,4 @@
-package com.example.myapplication.db;
+package me.mp1282.shoppinglist.db;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -10,9 +10,9 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.example.myapplication.model.CategoryModel;
-import com.example.myapplication.model.ItemModel;
-import com.example.myapplication.model.ShoppingListModel;
+import me.mp1282.shoppinglist.model.CategoryModel;
+import me.mp1282.shoppinglist.model.ItemModel;
+import me.mp1282.shoppinglist.model.ShoppingListModel;
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -187,7 +187,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 while(result.moveToNext()) {
                     long id = result.getLong(result.getColumnIndex(DBContract.ItemTable._ID));
                     String name = result.getString(result.getColumnIndex(DBContract.ItemTable.COLUMN_NAME));
-                    long catId = result.getLong(result.getColumnIndex(DBContract.ItemTable.COLUMN_CATEGORY_ID));
                     long purchasePower = result.getLong(result.getColumnIndex(DBContract.ItemTable.COLUMN_PURCHASE_POWER));
 
                     ItemModel itemModel = new ItemModel(name);

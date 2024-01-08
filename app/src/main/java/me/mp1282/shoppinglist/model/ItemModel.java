@@ -1,4 +1,4 @@
-package com.example.myapplication.model;
+package me.mp1282.shoppinglist.model;
 
 public class ItemModel {
 
@@ -32,6 +32,7 @@ public class ItemModel {
         return category;
     }
 
+    @SuppressWarnings("unused")
     public void setCategory(CategoryModel category) {
         this.category = category;
     }

@@ -1,4 +1,4 @@
-package com.example.myapplication.db;
+package me.mp1282.shoppinglist.db;
 
 import android.provider.BaseColumns;
 

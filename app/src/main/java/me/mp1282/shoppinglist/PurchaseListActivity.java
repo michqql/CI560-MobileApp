@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package me.mp1282.shoppinglist;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -7,13 +7,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.myapplication.adapters.PurchaseAdapter;
-import com.example.myapplication.db.DBHelper;
-import com.example.myapplication.model.ShoppingListModel;
+import me.mp1282.shoppinglist.adapters.PurchaseAdapter;
+import me.mp1282.shoppinglist.db.DBHelper;
+import me.mp1282.shoppinglist.model.ShoppingListModel;
 
 public class PurchaseListActivity extends AppCompatActivity {
 

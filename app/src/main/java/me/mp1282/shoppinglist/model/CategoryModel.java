@@ -1,10 +1,6 @@
-package com.example.myapplication.model;
+package me.mp1282.shoppinglist.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import androidx.annotation.NonNull;
-
+@SuppressWarnings("unused")
 public class CategoryModel {
 
     private long id;
